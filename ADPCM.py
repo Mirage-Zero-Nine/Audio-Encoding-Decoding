@@ -53,21 +53,21 @@ def encoder(raw_y):
         if diff >= temp_step:
             code = code | 1
 
-        diffq = step >> 3
+        different_quantized = step >> 3
 
         if code & 4:
-            diffq = diffq + step
+            different_quantized = different_quantized + step
 
         if code & 2:
-            diffq = diffq + step >> 1
+            different_quantized = different_quantized + step >> 1
 
         if code & 1:
-            diffq = diffq + step >> 2
+            different_quantized = different_quantized + step >> 2
 
         if code & 8:
-            predict_sample = predict_sample - diffq
+            predict_sample = predict_sample - different_quantized
         else:
-            predict_sample = predict_sample + diffq
+            predict_sample = predict_sample + different_quantized
 
         if predict_sample > 32767:
             predict_sample = 32767
@@ -92,7 +92,7 @@ def encoder(raw_y):
 
 
 def decoder(adpcm_y):
-    out = np.array(adpcm_y, dtype=float)
+    out = np.array(adpcm_y, dtype=int)
 
     previous_sample = 0
     previous_index = 0
@@ -136,8 +136,8 @@ def decoder(adpcm_y):
 
         # print(predict_sample)
 
-        out[n] = predict_sample / 32767
-
+        # out[n] = predict_sample / 32767
+        out[n] = predict_sample
         n += 1
 
     return out

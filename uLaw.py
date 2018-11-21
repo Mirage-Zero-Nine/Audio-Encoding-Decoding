@@ -11,45 +11,49 @@ import numpy as np
 import math
 
 
-def u_law_encode(vector, max=32768):
+def u_law_compress(arr):
+    max_in_arr = np.amax(arr)
     u = 255
-    out = np.array(vector, dtype=float)
+    out = np.array(arr, dtype=float)
     de = math.log(1 + u)
-    for i in range(0, len(vector)):
-        # print("vector[i] = " + str(vector[i]))
-        if vector[i] >= 0:
-            sign = 1
-        else:
-            sign = -1
-        # print("abs(vector[i] / max) = " + str(abs(vector[i] / max)))
+    for i in range(0, len(arr)):
 
-        # up = math.log(1 + u * abs(vector[i] / max))
+        up = 1 + u * abs(arr[i])
+        # print(up)
+        o = (math.log(up) * max_in_arr) / de
+        if arr[i] < 0:
+            o = -o
+        out[i] = o
 
-        out[i] = sign * (math.log(1 + u * abs(vector[i] / max)) / de)
-
-        # print(abs(vector[i] / max))
-    # print(out)
     return out
 
 
-def u_law_decode(vector, max=128):
-    u = 256
+def u_law_expend(arr, max_in_arr):
+    u = 255
+    max_in_arr = np.amax(arr)
 
-    out = vector.astype(float)
-    # normalized_signal = (out / u - 0.5) * 2.0
+    out = np.array(arr, dtype=float)
+    for i in range(0, len(arr)):
 
-    # inv mu-law
-    mu = u - 1
-    # signals_1d = np.sign(normalized_signal) * ((1 + mu) ** np.absolute(normalized_signal)) / mu
-    for i in range(0, len(vector)):
-        if vector[i] >= 0:
-            sign = 1
-        else:
-            sign = -1
-        out[i] = sign * (pow((1 + u), abs(vector[i]) - 1) / u)
-        out[i] *= max
+        # if arr[i] > 0:
+        #     sign = True
+        # else:
+        #     sign = False
 
-    # print(out)
-    # signals_1d *= max
-    # print(signals_1d)
+        p = math.log(256) * abs(arr[i]) / max_in_arr
+        # if not sign:
+        #     p = -p
+        o = max_in_arr * (math.exp(p) - 1) / u
+        # print(o)
+        if arr[i] < 0:
+            o = -o
+        out[i] = o
+
     return out
+
+
+if __name__ == '__main__':
+    # print(math.log(1 + 255))
+    arr = [0.01, 0.02]
+    print(arr)
+    print(u_law_compress(arr))
