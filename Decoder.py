@@ -14,36 +14,39 @@ StepSizeTable = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34
                  3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289,
                  16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767]
 
-def Decoder(adpcm_y):
+
+def decoder(adpcm_y):
     out = adpcm_y
 
-    prevsample = 0
-    previndex = 1
+    previous_sample = 0
+    previous_index = 1
 
-    Ns = len(adpcm_y)
+    length = len(adpcm_y)
     n = 1
-    while n < Ns:
-        predsample = prevsample
-        index = previndex
+
+    while n < length:
+        predict_sample = previous_sample
+        index = previous_index
         step = StepSizeTable[index]
-        code = adpcm_y(n)
-        diffq = step >> 3
+        code = adpcm_y[n]
+
+        different_quantized = step >> 3
 
         if code & 4:
-            diffq = diffq + step
+            different_quantized = different_quantized + step
         if code & 2:
-            diffq = diffq + step >> 1
+            different_quantized = different_quantized + step >> 1
         if code & 1:
-            diffq = diffq + step >> 2
+            different_quantized = different_quantized + step >> 2
         if code & 8:
-            predsample = predsample - diffq
+            predict_sample = predict_sample - different_quantized
         else:
-            predsample = predsample + diffq
+            predict_sample = predict_sample + different_quantized
 
-        if predsample > 32767:
-            predsample = 32767
-        elif predsample < -32768:
-            predsample = -32768
+        if predict_sample > 32767:
+            predict_sample = 32767
+        elif predict_sample < -32768:
+            predict_sample = -32768
 
         index = index + IndexTable[code + 1]
 
@@ -52,10 +55,11 @@ def Decoder(adpcm_y):
         if index > 89:
             index = 89
 
-        prevsample = predsample
-        previndex = index
+        previous_sample = predict_sample
+        previous_index = index
 
-        out[n] = code | 15
+        out[n] = predict_sample / 32767
 
         n += 1
-        return out
+
+    return out

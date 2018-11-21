@@ -15,7 +15,7 @@ StepSizeTable = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34
                  16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767]
 
 
-def Encoder(raw_y):
+def encoder(raw_y):
     out = raw_y
     previous_sample = 0
     previous_index = 1
