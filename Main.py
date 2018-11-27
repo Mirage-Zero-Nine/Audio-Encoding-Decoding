@@ -11,6 +11,8 @@ from scipy.io.wavfile import read
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io.wavfile import write
+
+# Own lib
 import uLaw
 import ADPCM
 import Quantization
@@ -18,6 +20,10 @@ import datetime
 
 
 def date_string():
+    """
+    Generate current date and time as file name.
+    :return: current date time in string format
+    """
     now = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     return str(now)
 
@@ -34,6 +40,12 @@ def read_wav(path='8bits.wav'):
 
 
 def plot_arr(arr, title):
+    """
+    Plot given numpy array
+    :param arr: numpy array
+    :param title: plot title
+    :return: None
+    """
     plt.plot(arr)
     plt.title(title)
     plt.savefig(date_string() + '.png')
@@ -75,7 +87,7 @@ if __name__ == '__main__':
 
     adpcm_decoding_quantized = Quantization.quantization(adpcm_decoding, 128, 'float')
 
-    ulaw_decompressed_adpcm = uLaw.u_law_expend(adpcm_decoding, np.amax(adpcm_decoding))
+    ulaw_decompressed_adpcm = uLaw.u_law_expend(adpcm_decoding)
     plot_arr(ulaw_decompressed_adpcm, 'u-law expansion ADPCM decoding')
 
     write('Reconstructed.wav', wav_rate, ulaw_decompressed_adpcm)

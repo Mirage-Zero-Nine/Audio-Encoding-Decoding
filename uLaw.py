@@ -12,6 +12,11 @@ import math
 
 
 def u_law_compress(arr):
+    """
+    u-Law compress function
+    :param arr: given array
+    :return: compressed array
+    """
     max_in_arr = np.amax(arr)
     u = 255
     out = np.array(arr, dtype=float)
@@ -28,7 +33,12 @@ def u_law_compress(arr):
     return out
 
 
-def u_law_expend(arr, max_in_arr):
+def u_law_expend(arr):
+    """
+    Expend compressed array.
+    :param arr: given array
+    :return: expended array
+    """
     u = 255
     max_in_arr = np.amax(arr)
 
