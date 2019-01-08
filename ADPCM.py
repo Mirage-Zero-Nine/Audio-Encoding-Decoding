@@ -7,6 +7,7 @@ File Name: ADPCM
 Create Time: 11/20/18 22:40
 '''
 import numpy as np
+import logging
 
 IndexTable = [-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8]
 StepSizeTable = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73, 80,
@@ -141,3 +142,7 @@ def decoder(adpcm_y):
         n += 1
 
     return out
+
+
+if __name__ == '__main__':
+    pass

@@ -9,6 +9,12 @@ Create Time: 11/20/18 21:58
 
 import numpy as np
 import math
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S'
+                    )
 
 
 def u_law_compress(arr):
@@ -24,7 +30,6 @@ def u_law_compress(arr):
     for i in range(0, len(arr)):
 
         up = 1 + u * abs(arr[i])
-        # print(up)
         o = (math.log(up) * max_in_arr) / de
         if arr[i] < 0:
             o = -o
@@ -45,16 +50,8 @@ def u_law_expend(arr):
     out = np.array(arr, dtype=float)
     for i in range(0, len(arr)):
 
-        # if arr[i] > 0:
-        #     sign = True
-        # else:
-        #     sign = False
-
         p = math.log(256) * abs(arr[i]) / max_in_arr
-        # if not sign:
-        #     p = -p
         o = max_in_arr * (math.exp(p) - 1) / u
-        # print(o)
         if arr[i] < 0:
             o = -o
         out[i] = o
@@ -64,6 +61,7 @@ def u_law_expend(arr):
 
 if __name__ == '__main__':
     # print(math.log(1 + 255))
-    arr = [0.01, 0.02]
-    print(arr)
-    print(u_law_compress(arr))
+    # array = [0.01, 0.02]
+    # print(array)
+    # print(u_law_compress(array))
+    pass

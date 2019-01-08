@@ -7,8 +7,8 @@ File Name: Quantization
 Create Time: 11/21/18 09:33
 '''
 
-import math
 import numpy as np
+import logging
 
 
 def quantization(arr, max, type='float'):
